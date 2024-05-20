@@ -1,0 +1,70 @@
+version: '3'
+
+networks:
+  server_network:
+
+services:
+
+  # RestAPI
+  web:
+    build:
+      context: .
+      dockerfile: ./RestAPI/Dockerfile
+    volumes:
+      - ./RestAPI:/app/
+    env_file:
+      - ./RestAPI/.env
+    environment:
+      - DEBUG=${DEBUG:-true}
+      - DJANGO_SECRET_KEY=${DJANGO_SECRET_KEY}
+      - SERVER_HOSTNAME=${SERVER_HOSTNAME}
+      - POSTGRES_DB=${POSTGRES_DB:-postgress}
+      - POSTGRES_USER=${POSTGRES_USER:-postgress}
+      - POSTGRES_PASSWORD=${POSTGRES_PASSWORD:-postgress}
+    command: >
+      sh -c "
+      python manage.py makemigrations &&
+      python manage.py migrate &&
+      python manage.py runserver 0.0.0.0:8000
+      "
+    depends_on:
+      - rabbit_mq
+      - database
+    expose:
+      - "8000"
+    ports:
+      - "8000:8000"
+    networks:
+      - server_network
+
+  # Database
+  database:
+    image: postgres
+    env_file:
+      - ./serverilio/.env
+    environment:
+      - POSTGRES_DB=${POSTGRES_DB:-postgress}
+      - POSTGRES_USER=${POSTGRES_USER:-postgress}
+      - POSTGRES_PASSWORD=${POSTGRES_PASSWORD:-postgress}
+    expose:
+      - "5432"
+    ports:
+      - "5432:5432"
+    networks:
+      - server_network
+
+  # Message Broker
+  # rabbitMQ doesn't actually depends on the database, is just done, to give
+  # the database time to setup before the other services start.
+  rabbit_mq:
+    image: "rabbitmq"
+    depends_on:
+      - database
+    expose:
+      - "5672"
+    ports:
+      - "5672:5672"
+    networks:
+      - server_network
+
+  # Worker
