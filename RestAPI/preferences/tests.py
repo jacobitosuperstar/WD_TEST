@@ -31,7 +31,8 @@ class ClientsPreferencesWorkflowTest(TestCase):
         }
         response = self.client.post(
             reverse(viewname="create_client"),
-            data=msg,
+            data=json.dumps(msg),
+            content_type='application/json'
         )
         self.assertEqual(response.status_code, status.created)
         created_client_info = json.loads(response.content)
@@ -55,7 +56,8 @@ class ClientsPreferencesWorkflowTest(TestCase):
                 viewname="detailed_preferences",
                 args=[created_client_info["client"]["id"]],
             ),
-            data=msg,
+            data=json.dumps(msg),
+            content_type='application/json'
         )
         new_preferences = json.loads(response.content)
         self.assertEqual(response.status_code, status.accepted)

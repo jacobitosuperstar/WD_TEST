@@ -32,7 +32,8 @@ class ClientsWorkflowTest(TestCase):
         }
         response = self.client.post(
             reverse(viewname="create_notification"),
-            data=msg,
+            data=json.dumps(msg),
+            content_type='application/json',
         )
         self.assertEqual(response.status_code, status.created)
         created_notification = json.loads(response.content)
@@ -72,7 +73,8 @@ class ClientsWorkflowTest(TestCase):
         }
         response = self.client.post(
             reverse(viewname="create_notification"),
-            data=msg,
+            data=json.dumps(msg),
+            content_type='application/json',
         )
         self.assertEqual(response.status_code, status.created)
         created_notification = json.loads(response.content)
@@ -91,7 +93,8 @@ class ClientsWorkflowTest(TestCase):
                 viewname="detailed_crud_notification",
                 args=[created_notification["notification"]["id"]],
             ),
-            data=new_msg,
+            data=json.dumps(new_msg),
+            content_type='application/json',
         )
         self.assertEqual(response.status_code, status.accepted)
         updated_notification = json.loads(response.content)
@@ -115,7 +118,6 @@ class ClientsWorkflowTest(TestCase):
                 viewname="detailed_crud_notification",
                 args=[updated_notification["notification"]["id"]],
             ),
-            data=msg,
         )
         deleted_notification = json.loads(response.content)
         self.assertEqual(deleted_notification["notification"]["deleted"], True)

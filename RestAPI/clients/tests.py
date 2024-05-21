@@ -22,7 +22,7 @@ class ClientsWorkflowTest(TestCase):
         Test flow for the creation of several clients and checking that
         all the information regarding them is actually recorded on the DB.
         """
-        # Create a client
+        # Create clients
         msg = {
             "name": "test name 1",
             "email": "test1@test.com",
@@ -31,7 +31,8 @@ class ClientsWorkflowTest(TestCase):
         }
         response = self.client.post(
             reverse(viewname="create_client"),
-            data=msg,
+            data=json.dumps(msg),
+            content_type='application/json',
         )
         self.assertEqual(response.status_code, status.created)
 
@@ -43,7 +44,8 @@ class ClientsWorkflowTest(TestCase):
         }
         response = self.client.post(
             reverse(viewname="create_client"),
-            data=msg,
+            data=json.dumps(msg),
+            content_type='application/json',
         )
         self.assertEqual(response.status_code, status.created)
         created_client_info_2 = json.loads(response.content)
@@ -82,7 +84,8 @@ class ClientsWorkflowTest(TestCase):
         }
         response = self.client.post(
             reverse(viewname="create_client"),
-            data=msg,
+            data=json.dumps(msg),
+            content_type='application/json',
         )
         self.assertEqual(response.status_code, status.created)
         created_client_info = json.loads(response.content)
@@ -96,7 +99,8 @@ class ClientsWorkflowTest(TestCase):
                 viewname="detailed_crud_client",
                 args=[created_client_info["client"]["id"]],
             ),
-            data=msg,
+            data=json.dumps(msg),
+            content_type='application/json',
         )
         self.assertEqual(response.status_code, status.accepted)
 
@@ -115,7 +119,6 @@ class ClientsWorkflowTest(TestCase):
                 viewname="detailed_crud_client",
                 args=[created_client_info["client"]["id"]],
             ),
-            data=msg,
         )
         deleted_client_info = json.loads(response.content)
         self.assertEqual(deleted_client_info["client"]["deleted"], True)

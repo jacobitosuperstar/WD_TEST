@@ -1,5 +1,6 @@
 """Base Mixins for the project.
 """
+import json
 from django.views import View
 from django.utils.translation import gettext as _
 from django.http import HttpRequest, JsonResponse
@@ -40,7 +41,8 @@ class BaseCreateView(BaseMixin, View):
         Creates a db object given the form data in the POST request.
         """
         try:
-            created_object = self.create_object(data=request.POST)
+            request_json = json.loads(request.body)
+            created_object = self.create_object(data=request_json)
             msg = {
                 self.model._meta.verbose_name: self.serialize(created_object),
             }
@@ -93,9 +95,10 @@ class BaseUpdateView(BaseMixin, View):
         try:
             data = {self.url_kwarg: self.kwargs.get(self.url_kwarg)}
             db_object = self.get_query(data=data)
+            request_json = json.loads(request.body)
             db_object = self.update_object(
                 db_object=db_object,
-                data=request.POST,
+                data=request_json,
             )
             msg = {
                 self.model._meta.verbose_name: self.serialize(db_object),
