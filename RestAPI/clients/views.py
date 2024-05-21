@@ -16,14 +16,6 @@ class ClientListView(BaseListView):
     model = Client
     serializer_depth = 0
 
-class ClientDeatilView(BaseDetailView):
-    """
-    Specific Client
-    """
-    model = Client
-    serializer_depth = 0
-    url_kwarg = "id"
-
 class ClientCreationView(BaseCreateView):
     """
     Client Creation
@@ -31,17 +23,14 @@ class ClientCreationView(BaseCreateView):
     model = Client
     serializer_depth = 0
 
-class ClientUpdateView(BaseUpdateView):
+class ClientDeatilUpdateDeleteView(
+    BaseDetailView,
+    BaseUpdateView,
+    BaseDeleteView,
+):
     """
-    Client information update
-    """
-    model = Client
-    serializer_depth = 0
-    url_kwarg = "id"
-
-class ClientDeleteView(BaseDeleteView):
-    """
-    Client soft delete
+    Specific Client operations. Get specific client, Update specific client,
+    Delete specific client.
     """
     model = Client
     serializer_depth = 0

@@ -10,6 +10,7 @@ For the full list of settings and their values, see
 https://docs.djangoproject.com/en/4.2/ref/settings/
 """
 
+import os
 from pathlib import Path
 
 # Build paths inside the project like this: BASE_DIR / 'subdir'.
@@ -20,11 +21,17 @@ BASE_DIR = Path(__file__).resolve().parent.parent
 # See https://docs.djangoproject.com/en/4.2/howto/deployment/checklist/
 
 # SECURITY WARNING: keep the secret key used in production secret!
-SECRET_KEY = 'django-insecure-e1yf9-z7!yeqmd@i)c=i_x^s+o6hyjn1fw91!82fnpjn+4jugc'
+SECRET_KEY = os.environ.get(
+    "DJANGO_SECRET_KEY",
+    'django-insecure-e1yf9-z7!yeqmd@i)c=i_x^s+o6hyjn1fw91!82fnpjn+4jugc',
+)
+
 
 # SECURITY WARNING: don't run with debug turned on in production!
-DEBUG = True
+DEBUG = os.environ.get("DEBUG") == "true"
 
+# SECURITY WARNING: running an unspecified ammount of allowed hosts is not
+# desirable.
 ALLOWED_HOSTS = ["*"]
 
 
@@ -40,6 +47,7 @@ INSTALLED_APPS = [
     # My Apps
     "clients.apps.ClientsConfig",
     "preferences.apps.PreferencesConfig",
+    "notifications.apps.NotificationsConfig",
 ]
 
 MIDDLEWARE = [
@@ -83,6 +91,17 @@ DATABASES = {
     }
 }
 
+# DATABASES = {
+#     'default': {
+#         'ENGINE': 'django.db.backends.postgresql_psycopg2',
+#         'NAME': os.environ.get("POSTGRES_DB"),  # Replace with your database name
+#         'USER': os.environ.get("POSTGRES_USER"),  # Replace with your database username
+#         'PASSWORD': os.environ.get("POSTGRES_PASSWORD"),  # Replace with your database password
+#         'HOST': 'database',  # This is the name of the service in the docker-compose
+#         'PORT': '5432',  # Post specified in the docker-compose
+#     }
+# }
+
 
 # Password validation
 # https://docs.djangoproject.com/en/4.2/ref/settings/#auth-password-validators
@@ -124,3 +143,6 @@ STATIC_URL = 'static/'
 # https://docs.djangoproject.com/en/4.2/ref/settings/#default-auto-field
 
 DEFAULT_AUTO_FIELD = 'django.db.models.BigAutoField'
+
+RABBIT_MQ_HOST = 'rabbit_mq'
+RABBIT_MQ_PORT = '5672'

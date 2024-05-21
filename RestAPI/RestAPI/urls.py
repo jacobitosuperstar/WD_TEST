@@ -21,5 +21,5 @@ urlpatterns = [
     # path('admin/', admin.site.urls),
     path("clients/", include("clients.urls")),
     path("preferences/", include("preferences.urls")),
-    # path("notifications/", include("notifications.urls")),
+    path("notifications/", include("notifications.urls")),
 ]

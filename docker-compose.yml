@@ -16,11 +16,7 @@ services:
       - ./RestAPI/.env
     environment:
       - DEBUG=${DEBUG:-true}
-      - DJANGO_SECRET_KEY=${DJANGO_SECRET_KEY}
-      - SERVER_HOSTNAME=${SERVER_HOSTNAME}
-      - POSTGRES_DB=${POSTGRES_DB:-postgress}
-      - POSTGRES_USER=${POSTGRES_USER:-postgress}
-      - POSTGRES_PASSWORD=${POSTGRES_PASSWORD:-postgress}
+      - DJANGO_SECRET_KEY=${DJANGO_SECRET_KEY:-django-insecure-password}
     command: >
       sh -c "
       python manage.py makemigrations &&
@@ -34,22 +30,6 @@ services:
       - "8000"
     ports:
       - "8000:8000"
-    networks:
-      - server_network
-
-  # Database
-  database:
-    image: postgres
-    env_file:
-      - ./serverilio/.env
-    environment:
-      - POSTGRES_DB=${POSTGRES_DB:-postgress}
-      - POSTGRES_USER=${POSTGRES_USER:-postgress}
-      - POSTGRES_PASSWORD=${POSTGRES_PASSWORD:-postgress}
-    expose:
-      - "5432"
-    ports:
-      - "5432:5432"
     networks:
       - server_network
 
@@ -67,4 +47,34 @@ services:
     networks:
       - server_network
 
-  # Worker
+  # Worker sender SMS
+  sms_worker:
+    build:
+      context: .
+      dockerfile: ./senderSMS/Dockerfile
+    volumes:
+      - ./senderSMS:/app/
+    command: >
+      sh -c "
+      python consumer.py
+      "
+    depends_on:
+      - rabbit_mq
+    networks:
+      - server_network
+
+  # Worker sender Email
+  email_worker:
+    build:
+      context: .
+      dockerfile: ./senderEMAIL/Dockerfile
+    volumes:
+      - ./senderEMAIL:/app/
+    command: >
+      sh -c "
+      python consumer.py
+      "
+    depends_on:
+      - rabbit_mq
+    networks:
+      - server_network

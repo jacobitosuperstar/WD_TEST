@@ -59,10 +59,12 @@ class ClientsPreferencesWorkflowTest(TestCase):
         )
         new_preferences = json.loads(response.content)
         self.assertEqual(response.status_code, status.accepted)
+        # email preferences are the same
         self.assertEqual(
             new_preferences["notification_preferences"]["email"],
             msg["email"]
         )
+        # sms preferences are the same
         self.assertEqual(
             new_preferences["notification_preferences"]["sms"],
             msg["sms"]

@@ -5,6 +5,8 @@ name = "pypi"
 
 [packages]
 django = "==4.2"
+psycopg2-binary = "*"
+pika = "*"
 
 [dev-packages]
 ipython = "*"

@@ -5,10 +5,8 @@ Clients URLs
 from django.urls import path
 from .views import (
     ClientListView,
-    ClientDeatilView,
     ClientCreationView,
-    ClientUpdateView,
-    ClientDeleteView,
+    ClientDeatilUpdateDeleteView,
 )
 
 urlpatterns = [
@@ -24,17 +22,7 @@ urlpatterns = [
     ),
     path(
         "<int:id>/",
-        ClientDeatilView.as_view(),
-        name="detailed_client",
-    ),
-    path(
-        "<int:id>/update_client/",
-        ClientUpdateView.as_view(),
-        name="update_client",
-    ),
-    path(
-        "<int:id>/delete_client/",
-        ClientDeleteView.as_view(),
-        name="delete_client",
+        ClientDeatilUpdateDeleteView.as_view(),
+        name="detailed_crud_client",
     ),
 ]

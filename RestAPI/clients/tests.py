@@ -57,7 +57,7 @@ class ClientsWorkflowTest(TestCase):
         # get an specific client
         response = self.client.get(
             reverse(
-                viewname="detailed_client",
+                viewname="detailed_crud_client",
                 args=[created_client_info_2["client"]["id"]],
             ),
         )
@@ -93,7 +93,7 @@ class ClientsWorkflowTest(TestCase):
 
         response = self.client.post(
             reverse(
-                viewname="update_client",
+                viewname="detailed_crud_client",
                 args=[created_client_info["client"]["id"]],
             ),
             data=msg,
@@ -103,7 +103,7 @@ class ClientsWorkflowTest(TestCase):
         # Delete a client
         response = self.client.delete(
             reverse(
-                viewname="delete_client",
+                viewname="detailed_crud_client",
                 args=[created_client_info["client"]["id"]],
             ),
         )
@@ -112,7 +112,7 @@ class ClientsWorkflowTest(TestCase):
         # Checking that the client is soft deleted
         response = self.client.get(
             reverse(
-                viewname="detailed_client",
+                viewname="detailed_crud_client",
                 args=[created_client_info["client"]["id"]],
             ),
             data=msg,
