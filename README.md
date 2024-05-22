@@ -2,9 +2,11 @@
 
 ## ARCHITECTURE
 
+![WD_Architecture](https://github.com/jacobitosuperstar/WD_TEST/assets/31142688/5784f395-918f-4fc2-90ed-5427a2307626)
 
 ## DATA MODELS
 
+![WD_TEST](https://github.com/jacobitosuperstar/WD_TEST/assets/31142688/105c821f-aa5a-4901-b486-27627cf9ca62)
 
 ## INDEX
 
@@ -14,6 +16,7 @@
   - [STACK USED](#stack-used)
   - [RUNNING THE TESTS](#running-the-tests)
   - [SCOPE AND LIMITATIONS](#scope-and-limitations)
+  - [FUTURE WORK](#future-work)
 
 # SET UP
 
@@ -98,5 +101,14 @@ the processes around the application, which are,
   queues to route them.
 - Because of the fast startup time of the consumers, a 10 second delay was
   added so the rabbitMQ container can start before them.
+
+## FUTURE WORK
+
+- Add layers of security, creating a limited USER to run the commands inside
+  the docker container.
+- Add authentication and role management to the backend.
+- Better database schema and use an independed database container.
+- Error handling. There is no a clear way on how we want the application to
+  behave when the different parts of the service fail.
 
 [1]: https://www.docker.com
