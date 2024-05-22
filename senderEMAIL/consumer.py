@@ -1,6 +1,7 @@
 import os
 import sys
 import json
+import time
 import pika
 
 def consumer(
@@ -57,6 +58,7 @@ def consumer(
         os._exit(0)
 
 if __name__ == "__main__":
+    time.sleep(10)
     consumer(
         host="rabbit_mq",
         port="5672",
